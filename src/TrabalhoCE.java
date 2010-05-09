@@ -11,7 +11,7 @@ public class TrabalhoCE {
 		
 		String[] candidato = new String[10];
 		for (int i=0;i<10;i++) {
-			candidato[i] = "000000000000000000000000000000";
+			candidato[i] = "0000000000000000000000000000000";
 		}
 		Cromossomo cromossomo = new Cromossomo(candidato);
 		System.out.println(cromossomo.evaluation() + "\n");
@@ -19,11 +19,12 @@ public class TrabalhoCE {
 		Cromossomo cromossomo2 = new Cromossomo();
 		System.out.println(cromossomo2.evaluation() + "\n");	
 		
-		String grayString = "000000000000000000000000000011";
-		Integer gray = cromossomo.grayToBinary(grayString);
+		String grayString = "00000000000000000000000000000101";
+		int gray = Integer.parseInt(grayString,2);
+		int binary = cromossomo.grayToBinary(gray);
 		System.out.println("Gray  : " + grayString);
-		String binaryString = Integer.toBinaryString(gray);
-		while (binaryString.length() < 30) {
+		String binaryString = Integer.toBinaryString(binary);
+		while (binaryString.length() < 32) {
 			binaryString = "0" + binaryString;
 		}
 		System.out.println("Binary: " + binaryString);

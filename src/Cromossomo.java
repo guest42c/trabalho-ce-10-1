@@ -16,10 +16,10 @@ import java.util.Random;
 public class Cromossomo {
 	
 	private static int MAX_GENES = 10;
-	Integer [] genes = new Integer[MAX_GENES];	
+	int [] genes = new int[MAX_GENES];	
 	private static int bottom = -500; //limite inferior da solução
 	private static int top = 500; //limite superior da solução
-	private static int maskOne = Integer.parseInt("1000000000000000000000000000000", 2);
+	private static int maskOne = Integer.parseInt("01000000000000000000000000000000",2);
 	
 	Random rand = new Random();
 	
@@ -88,53 +88,66 @@ public class Cromossomo {
 	 * @param gray
 	 * @return
 	 */
-	public Integer grayToBinary(Integer gray) {
-		//TODO: Esta fazendo errado!!! Corrigir!
-		int mask = maskOne;
+	public int grayToBinary(int gray) {
+		boolean value;
+		int maskA = Integer.parseInt("01000000000000000000000000000000",2);
 		String binaryString = "";
-		if ((mask & gray) > 0) {
-			binaryString = binaryString + "1";
+		//TODO: if problematico (mesma solução do binaryToGray)
+		if (true) {
+			binaryString = "0";
+			value = false;
 		}
-		for (int i=1;i<31;i++) {
-			int maskA = mask >> i;
-			int maskB = mask >> (i-1);
-			if (((maskA & gray) ^ (maskB & gray))  > 0) 
+		//FIM da parte com problema com problema
+		for (int i=1;i<=31;i++) {
+			if ((maskA & gray) > 0) 
+				value = !value;
+			if (value) {
 				binaryString = binaryString + "1";
-			else 
-				binaryString = binaryString + "0"; 
+			} else {
+				binaryString = binaryString + "0";
+			}
+			maskA = maskA >> 1;
 		}
 		return Integer.parseInt(binaryString, 2);
 	}
 	
-	public Integer grayToBinary(String grayString) {
-		int mask = maskOne;
-		int maskA,maskB;
-		Integer gray = Integer.parseInt(grayString,2);
-		String binaryString = "";
-		if ((mask & gray) > 0) {
-			binaryString = binaryString + "1";
-		} else {
-			binaryString = binaryString + "0";
-		}
-		for (int i=1;i<32;i++) {
-			maskA = mask >> i;
-			maskB = mask >> (i-1);
-			if (((maskA & gray) ^ (maskB & gray))  > 0) 
-				binaryString = binaryString + "1";
-			else 
-				binaryString = binaryString + "0"; 
-		}
-		return Integer.parseInt(binaryString, 2);
+	/*
+	public int grayToBinary(String grayString) {
+		//TODO: fazer		
+		return 0;
 	}
+	*/
 	
 	/**
-	 * Retorna o valor binário do gray coding
+	 * Retorna o valor binário do gray coding.
+	 * @author Guilherme
 	 * @param binary
 	 * @return gray coding
 	 */
-	private Integer binaryToGray(Integer binary) {
-		//TODO: implementar
-		return 0;
+	public int binaryToGray(Integer binary) {
+		int mask = maskOne;
+		int maskA = Integer.parseInt("01000000000000000000000000000000",2);
+		int maskB = Integer.parseInt("00000000000000000000000000000000",2);
+		String grayString = "";
+		//TODO: corrigir esse if
+		//Problema: mascara "10000000000000000000000000000000" não existe pq não é uma representação valida
+		//Ou seja, tem que testar se primeiro bit (mais significativo é 1) 
+		//se for add 1 pra String se não add 0.
+		if ((mask & binary) > 0) {
+			grayString = grayString + "1";
+		} else {
+			grayString = grayString + "0";
+		}
+		//FIM DO IF COM PROBLEMA
+		for (int i=1;i<=31;i++) {
+			if (((maskA & binary) ^ (maskB & binary))  > 0) 
+				grayString = grayString + "1";
+			else 
+				grayString = grayString + "0";
+			maskB = maskA;
+			maskA = mask >> i;
+		}
+		return Integer.parseInt(grayString, 2);
 	}
 	
 	/**
@@ -151,11 +164,11 @@ public class Cromossomo {
 	
     //Getters and Setters
 	
-	public Integer[] getCromossomo() {
+	public int[] getCromossomo() {
 		return genes;
 	}
 
-	public void setCromossomo(Integer[] cromossomo) {
+	public void setCromossomo(int[] cromossomo) {
 		for (int i=0;i<MAX_GENES;i++) {
 			this.genes[0] = cromossomo[i];
 		}		
