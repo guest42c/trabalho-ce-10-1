@@ -1,5 +1,7 @@
 import java.util.Random;
 
+
+
 /**
  * Esta classe é a representação de uma solução candidata ou seja do cromossomo em si.
  * Por questões de simplicidade e abrindo mão de desempenho usaremos essa classe para definir um cromossomo e
@@ -16,16 +18,24 @@ public class Cromossomo {
 	Integer cromossomo; //inteiro que representa a solução 
 	private static int bottom = -500; //limite inferior da solução
 	private static int top = 500; //limite superior da solução
+	private static int maskOne = Integer.parseInt("1000000000000000000000000000000", 2);
+	
+	Random rand = new Random();
 	
 	public Cromossomo() {
 		//TODO: Implementar construtor randomico (gerar uma solução randomica)
-		Random rand = new Random();
-		cromossomo = (rand.nextInt()%top)-bottom;
+		cromossomo = rand.nextInt();
 	}
 	
 	public Cromossomo(Integer solucao) {
 		//TODO: Implementar construtor deterministico (gerar uma solução indicada)
 		cromossomo = solucao;
+	}
+	
+	public Cromossomo(long seed) {
+		//TODO: Implementar construtor passando seed
+		rand.setSeed(seed);
+		cromossomo = rand.nextInt();
 	}
 	
 	public double evaluation() {
@@ -35,8 +45,7 @@ public class Cromossomo {
 	
 	public void mutation() {
 		//TODO: implementar mutação
-		Random rand = new Random();
-		cromossomo = rand.nextInt();
+		cromossomo = ((int)(Math.random()*(top-bottom+1)))+bottom;
 	}
 	
 	public Cromossomo crossover(Cromossomo partner) {
@@ -44,14 +53,62 @@ public class Cromossomo {
 		return partner;
 	}
 	
-	public Integer binaryToGray(Integer binary) {
-		//TODO: Implementar
-		return binary;
+	private Integer grayToBinary(Integer gray) {
+		int mask = maskOne;
+		String binaryString = "";
+		if ((mask & gray) > 0) {
+			binaryString = binaryString + "1";
+		}
+		for (int i=1;i<31;i++) {
+			int maskA = mask >> i;
+			int maskB = mask >> (i-1);
+			if (((maskA & gray) ^ (maskB & gray))  > 0) 
+				binaryString = binaryString + "1";
+			else 
+				binaryString = binaryString + "0"; 
+		}
+		return Integer.parseInt(binaryString, 2);
 	}
 	
-	public Integer grayToBinary(Integer gray) {
-		//TODO: Implementar
-		return gray;
+	private double grayToDouble(Integer gray) {
+		Integer binary = grayToBinary(gray);
+		
+		return bottom + binary * ((top-bottom)/(Math.pow(2, 32)-1));
 	}
+	
+	public String getStringRepresentation() {
+		//32Bits
+		return Integer.toBinaryString(cromossomo);
+	}
+	
+	public double getDoubleRepresentation(Integer cromossomo) {
+		return grayToDouble(cromossomo);
+	}
+	
+    // append reverse of order n gray code to prefix string, and print
+    static String yarg(String prefix, int n) {
+        if (n == 0) return prefix;
+        else {
+            prefix = gray(prefix + "1", n - 1) + yarg(prefix + "0", n - 1);
+            return prefix;
+        }
+    }  
+
+    // append order n gray code to end of prefix string, and print
+    static String gray(String prefix, int n) {
+        if (n == 0) return prefix;
+        else {
+            prefix = gray(prefix + "0", n - 1) + yarg(prefix + "1", n - 1);
+            return prefix;
+        }
+    }
+
+	public Integer getCromossomo() {
+		return cromossomo;
+	}
+
+	public void setCromossomo(Integer cromossomo) {
+		this.cromossomo = cromossomo;
+	}  
 
 }
