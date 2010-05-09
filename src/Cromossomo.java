@@ -1,3 +1,4 @@
+import java.sql.Time;
 import java.util.Random;
 
 
@@ -25,17 +26,58 @@ public class Cromossomo {
 	public Cromossomo() {
 		//TODO: Implementar construtor randomico (gerar uma solução randomica)
 		cromossomo = rand.nextInt();
+		String binaryString = Integer.toBinaryString(cromossomo);
+		//Removendo o bit mais significativo
+		//não sei pq ta dando problema, para outras funções só aceita 31bits
+		//bit de sinal????
+		binaryString = binaryString.substring(1, binaryString.length());
+		Integer grayCoding = Integer.parseInt(binaryString,2);
+		System.out.println("Representação: " + binaryString);
+		System.out.println("Valor gray coding: " + grayCoding);
+		System.out.println("Valor inteiro: " + grayToBinary(grayCoding));
 	}
 	
 	public Cromossomo(Integer solucao) {
 		//TODO: Implementar construtor deterministico (gerar uma solução indicada)
 		cromossomo = solucao;
+		String binaryString = Integer.toBinaryString(cromossomo);
+		//Removendo o bit mais significativo
+		//não sei pq ta dando problema, para outras funções só aceita 31bits
+		//bit de sinal????
+		binaryString = binaryString.substring(1, binaryString.length());
+		Integer grayCoding = Integer.parseInt(binaryString,2);
+		System.out.println("Representação: " + binaryString);
+		System.out.println("Valor gray coding: " + grayCoding);
+		System.out.println("Valor inteiro: " + grayToBinary(grayCoding));
+	}
+	
+	public Cromossomo(String solucao) {
+		//TODO: Implementar construtor deterministico (gerar uma solução indicada)
+		cromossomo = Integer.parseInt(solucao,2);
+		String binaryString = Integer.toBinaryString(cromossomo);
+		//Removendo o bit mais significativo
+		//não sei pq ta dando problema, para outras funções só aceita 31bits
+		//bit de sinal????
+		binaryString = binaryString.substring(1, binaryString.length());
+		Integer grayCoding = Integer.parseInt(binaryString,2);
+		System.out.println("Representação: " + binaryString);
+		System.out.println("Valor gray coding: " + grayCoding);
+		System.out.println("Valor inteiro: " + grayToBinary(grayCoding));
 	}
 	
 	public Cromossomo(long seed) {
 		//TODO: Implementar construtor passando seed
 		rand.setSeed(seed);
 		cromossomo = rand.nextInt();
+		String binaryString = Integer.toBinaryString(cromossomo);
+		//Removendo o bit mais significativo
+		//não sei pq ta dando problema, para outras funções só aceita 31bits
+		//bit de sinal????
+		binaryString = binaryString.substring(1, binaryString.length());
+		Integer grayCoding = Integer.parseInt(binaryString,2);
+		System.out.println("Representação: " + binaryString);
+		System.out.println("Valor gray coding: " + grayCoding);
+		System.out.println("Valor inteiro: " + grayToBinary(grayCoding));
 	}
 	
 	public double evaluation() {
@@ -68,6 +110,10 @@ public class Cromossomo {
 				binaryString = binaryString + "0"; 
 		}
 		return Integer.parseInt(binaryString, 2);
+	}
+	
+	private Integer binaryToGray(Integer binary) {
+		return 0;
 	}
 	
 	private double grayToDouble(Integer gray) {
