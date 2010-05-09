@@ -13,19 +13,19 @@ import java.util.Random;
  */
 public class Cromossomo {
 	
-	int representacao; //inteiro que representa a solução 
+	Integer cromossomo; //inteiro que representa a solução 
 	private static int bottom = -500; //limite inferior da solução
 	private static int top = 500; //limite superior da solução
 	
 	public Cromossomo() {
 		//TODO: Implementar construtor randomico (gerar uma solução randomica)
 		Random rand = new Random();
-		representacao = rand.nextInt();
+		cromossomo = (rand.nextInt()%top)-bottom;
 	}
 	
-	public Cromossomo(int solucao) {
+	public Cromossomo(Integer solucao) {
 		//TODO: Implementar construtor deterministico (gerar uma solução indicada)
-		representacao = solucao;
+		cromossomo = solucao;
 	}
 	
 	public double evaluation() {
@@ -36,12 +36,22 @@ public class Cromossomo {
 	public void mutation() {
 		//TODO: implementar mutação
 		Random rand = new Random();
-		representacao = rand.nextInt();
+		cromossomo = rand.nextInt();
 	}
 	
 	public Cromossomo crossover(Cromossomo partner) {
 		//TODO: Implementar crossover
 		return partner;
+	}
+	
+	public Integer binaryToGray(Integer binary) {
+		//TODO: Implementar
+		return binary;
+	}
+	
+	public Integer grayToBinary(Integer gray) {
+		//TODO: Implementar
+		return gray;
 	}
 
 }
