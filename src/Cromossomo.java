@@ -80,7 +80,16 @@ public class Cromossomo {
 		return partner;
 	}
 	
+	/**
+	 * A paritr do formato gray coding retorna um correspondente binário
+	 * Duas versões: 
+	 * 		uma passando um inteiro do gray coding
+	 * 		outra a string binária que representa gray coding 
+	 * @param gray
+	 * @return
+	 */
 	public Integer grayToBinary(Integer gray) {
+		//TODO: Esta fazendo errado!!! Corrigir!
 		int mask = maskOne;
 		String binaryString = "";
 		if ((mask & gray) > 0) {
@@ -118,33 +127,38 @@ public class Cromossomo {
 		return Integer.parseInt(binaryString, 2);
 	}
 	
+	/**
+	 * Retorna o valor binário do gray coding
+	 * @param binary
+	 * @return gray coding
+	 */
 	private Integer binaryToGray(Integer binary) {
+		//TODO: implementar
 		return 0;
 	}
 	
+	/**
+	 * Retorna diretamente o valor real (double) que o gray code representa
+	 * @param gray
+	 * @return
+	 */
 	private double grayToDouble(Integer gray) {
+		//TODO: terminar metodo grayToBinary() e então finalizar esse metodo aqui.
 		Integer binary = grayToBinary(gray);
 		
 		return bottom + binary * ((top-bottom)/(Math.pow(2, 32)-1));
 	}
 	
-	public String getStringRepresentation() {
-		//31Bits
-		return Integer.toBinaryString(genes[0]);
-	}
-	
-	public double getDoubleRepresentation(Integer cromossomo) {
-		return grayToDouble(cromossomo);
-	}
-	
     //Getters and Setters
 	
-	public Integer getCromossomo() {
-		return genes[0];
+	public Integer[] getCromossomo() {
+		return genes;
 	}
 
-	public void setCromossomo(Integer cromossomo) {
-		this.genes[0] = cromossomo;
+	public void setCromossomo(Integer[] cromossomo) {
+		for (int i=0;i<MAX_GENES;i++) {
+			this.genes[0] = cromossomo[i];
+		}		
 	}  
 
 }
