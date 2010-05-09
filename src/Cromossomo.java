@@ -1,13 +1,11 @@
-import java.sql.Time;
-import java.util.ArrayList;
 import java.util.Random;
 
 
 
 /**
  * Esta classe é a representação de uma solução candidata ou seja do cromossomo em si.
- * Por questões de simplicidade e abrindo mão de desempenho usaremos essa classe para definir um cromossomo e
- * as operações válidas sobre ele.
+ * Por questões de simplicidade e abrindo mão de desempenho usaremos essa classe para 
+ * definir um cromossomo e as operações válidas sobre ele.
  * 
  * Depois que o  programa estiver pronto e funcionando podemos substituir as chamadas de funções por 
  * códigos otimizados.
@@ -25,62 +23,38 @@ public class Cromossomo {
 	
 	Random rand = new Random();
 	
+	/**
+	 * Construtores
+	 * Cromossomo() gera um cromossomo aleatorio;
+	 * Cromossomo(String[] solucao) gera um cromossomo a partir do parametro solução;
+	 * Cromossomo(long seed) gera um cromossomo aleatorio a partir de um seed passado como parametro;
+	 * 
+	 */
 	public Cromossomo() {
-		//TODO: Implementar construtor randomico (gerar uma solução randomica)
 		for (int i=0;i<MAX_GENES;i++) {
 			genes[i] = rand.nextInt();
 		}
-		
-		String binaryString = Integer.toBinaryString(genes[0]);
-		
-		//Removendo o bit mais significativo
-		//não sei pq ta dando problema, para outras funções só aceita 31bits
-		//bit de sinal????
-//		binaryString = binaryString.substring(1, binaryString.length());
-//		Integer grayCoding = Integer.parseInt(binaryString,2);
-//		System.out.println("Representação: " + binaryString);
-//		System.out.println("Valor gray coding: " + grayCoding);
-//		System.out.println("Valor inteiro: " + grayToBinary(grayCoding));
 	}
 	
 	public Cromossomo(String[] solucao) {
-		//TODO: Implementar construtor deterministico (gerar uma solução indicada)
 		for (int i=0;i<MAX_GENES;i++) {
 			genes[i] = Integer.parseInt(solucao[i],2);
 		}
-		String binaryString = Integer.toBinaryString(genes[0]);
-		//Removendo o bit mais significativo
-		//não sei pq ta dando problema, para outras funções só aceita 31bits
-		//bit de sinal????
-//		binaryString = binaryString.substring(1, binaryString.length());
-//		Integer grayCoding = Integer.parseInt(binaryString,2);
-//		System.out.println("Representação gray coding: " + binaryString);
-//		System.out.println("Valor gray coding: " + grayCoding);
-//		System.out.println("Representação inteiro: " + Integer.toBinaryString(grayToBinary(grayCoding)));
-//		System.out.println("Valor inteiro: " + grayToBinary(grayCoding));
 	}
 	
 	public Cromossomo(long seed) {
-		//TODO: Implementar construtor passando seed
 		rand.setSeed(seed);
-
 		for (int i=0;i<MAX_GENES;i++) {
 			genes[i] = rand.nextInt();
-		}
-		
-		String binaryString = Integer.toBinaryString(genes[0]);
-		//Removendo o bit mais significativo
-		//não sei pq ta dando problema, para outras funções só aceita 31bits
-		//bit de sinal????
-//		binaryString = binaryString.substring(1, binaryString.length());
-//		Integer grayCoding = Integer.parseInt(binaryString,2);
-//		System.out.println("Representação gray coding: " + binaryString);
-//		System.out.println("Valor gray coding: " + grayCoding);
-//		System.out.println("Representação inteiro: " + Integer.toBinaryString(grayToBinary(grayCoding)));
-//		System.out.println("Valor inteiro: " + grayToBinary(grayCoding));
+		}	
 	}
 	
+	/**
+	 * Funcao de avaliação da solução candidata (cromossomo)
+	 * @return fitness do cromossomo
+	 */
 	public double evaluation() {
+		//TODO Mudar as variáveis genes[] para pegar o valor double que elas representam. Usar grayToDouble.
 		double somatorio = 0;
 		for (int i=0;i<MAX_GENES;i++) {
 			somatorio =  somatorio + (-genes[i]*Math.sin(Math.sqrt(Math.abs(genes[i]))));
@@ -88,11 +62,19 @@ public class Cromossomo {
 		return 418982.9101 + somatorio;
 	}
 	
+	
 	public void mutation() {
 		//TODO: implementar mutação
 		genes[0] = ((int)(Math.random()*(top-bottom+1)))+bottom;
 	}
 	
+	/**
+	 * Operação de crossover.
+	 * Funcionamento: em discussão.
+	 * @developer 
+	 * @param partner
+	 * @return
+	 */
 	public Cromossomo crossover(Cromossomo partner) {
 		//TODO: Implementar crossover
 		return partner;

@@ -11,7 +11,7 @@ public class TrabalhoCE {
 		
 		String[] candidato = new String[10];
 		for (int i=0;i<10;i++) {
-			candidato[i] = "000000000000010000000000000010";
+			candidato[i] = "000000000000000000000000000000";
 		}
 		Cromossomo cromossomo = new Cromossomo(candidato);
 		System.out.println(cromossomo.evaluation() + "\n");
