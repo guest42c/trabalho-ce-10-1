@@ -1,4 +1,5 @@
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -16,7 +17,8 @@ import java.util.Random;
  */
 public class Cromossomo {
 	
-	Integer cromossomo; //inteiro que representa a solução 
+	private static int MAX_GENES = 10;
+	Integer [] genes = new Integer[MAX_GENES];	
 	private static int bottom = -500; //limite inferior da solução
 	private static int top = 500; //limite superior da solução
 	private static int maskOne = Integer.parseInt("1000000000000000000000000000000", 2);
@@ -25,69 +27,70 @@ public class Cromossomo {
 	
 	public Cromossomo() {
 		//TODO: Implementar construtor randomico (gerar uma solução randomica)
-		cromossomo = rand.nextInt();
-		String binaryString = Integer.toBinaryString(cromossomo);
+		for (int i=0;i<MAX_GENES;i++) {
+			genes[i] = rand.nextInt();
+		}
+		
+		String binaryString = Integer.toBinaryString(genes[0]);
+		
 		//Removendo o bit mais significativo
 		//não sei pq ta dando problema, para outras funções só aceita 31bits
 		//bit de sinal????
-		binaryString = binaryString.substring(1, binaryString.length());
-		Integer grayCoding = Integer.parseInt(binaryString,2);
-		System.out.println("Representação: " + binaryString);
-		System.out.println("Valor gray coding: " + grayCoding);
-		System.out.println("Valor inteiro: " + grayToBinary(grayCoding));
+//		binaryString = binaryString.substring(1, binaryString.length());
+//		Integer grayCoding = Integer.parseInt(binaryString,2);
+//		System.out.println("Representação: " + binaryString);
+//		System.out.println("Valor gray coding: " + grayCoding);
+//		System.out.println("Valor inteiro: " + grayToBinary(grayCoding));
 	}
 	
-	public Cromossomo(Integer solucao) {
+	public Cromossomo(String[] solucao) {
 		//TODO: Implementar construtor deterministico (gerar uma solução indicada)
-		cromossomo = solucao;
-		String binaryString = Integer.toBinaryString(cromossomo);
+		for (int i=0;i<MAX_GENES;i++) {
+			genes[i] = Integer.parseInt(solucao[i],2);
+		}
+		String binaryString = Integer.toBinaryString(genes[0]);
 		//Removendo o bit mais significativo
 		//não sei pq ta dando problema, para outras funções só aceita 31bits
 		//bit de sinal????
-		binaryString = binaryString.substring(1, binaryString.length());
-		Integer grayCoding = Integer.parseInt(binaryString,2);
-		System.out.println("Representação: " + binaryString);
-		System.out.println("Valor gray coding: " + grayCoding);
-		System.out.println("Valor inteiro: " + grayToBinary(grayCoding));
-	}
-	
-	public Cromossomo(String solucao) {
-		//TODO: Implementar construtor deterministico (gerar uma solução indicada)
-		cromossomo = Integer.parseInt(solucao,2);
-		String binaryString = Integer.toBinaryString(cromossomo);
-		//Removendo o bit mais significativo
-		//não sei pq ta dando problema, para outras funções só aceita 31bits
-		//bit de sinal????
-		binaryString = binaryString.substring(1, binaryString.length());
-		Integer grayCoding = Integer.parseInt(binaryString,2);
-		System.out.println("Representação: " + binaryString);
-		System.out.println("Valor gray coding: " + grayCoding);
-		System.out.println("Valor inteiro: " + grayToBinary(grayCoding));
+//		binaryString = binaryString.substring(1, binaryString.length());
+//		Integer grayCoding = Integer.parseInt(binaryString,2);
+//		System.out.println("Representação gray coding: " + binaryString);
+//		System.out.println("Valor gray coding: " + grayCoding);
+//		System.out.println("Representação inteiro: " + Integer.toBinaryString(grayToBinary(grayCoding)));
+//		System.out.println("Valor inteiro: " + grayToBinary(grayCoding));
 	}
 	
 	public Cromossomo(long seed) {
 		//TODO: Implementar construtor passando seed
 		rand.setSeed(seed);
-		cromossomo = rand.nextInt();
-		String binaryString = Integer.toBinaryString(cromossomo);
+
+		for (int i=0;i<MAX_GENES;i++) {
+			genes[i] = rand.nextInt();
+		}
+		
+		String binaryString = Integer.toBinaryString(genes[0]);
 		//Removendo o bit mais significativo
 		//não sei pq ta dando problema, para outras funções só aceita 31bits
 		//bit de sinal????
-		binaryString = binaryString.substring(1, binaryString.length());
-		Integer grayCoding = Integer.parseInt(binaryString,2);
-		System.out.println("Representação: " + binaryString);
-		System.out.println("Valor gray coding: " + grayCoding);
-		System.out.println("Valor inteiro: " + grayToBinary(grayCoding));
+//		binaryString = binaryString.substring(1, binaryString.length());
+//		Integer grayCoding = Integer.parseInt(binaryString,2);
+//		System.out.println("Representação gray coding: " + binaryString);
+//		System.out.println("Valor gray coding: " + grayCoding);
+//		System.out.println("Representação inteiro: " + Integer.toBinaryString(grayToBinary(grayCoding)));
+//		System.out.println("Valor inteiro: " + grayToBinary(grayCoding));
 	}
 	
 	public double evaluation() {
-		//TODO: Implementar função de avaliação
-		return 1.0;
+		double somatorio = 0;
+		for (int i=0;i<MAX_GENES;i++) {
+			somatorio =  somatorio + (-genes[i]*Math.sin(Math.sqrt(Math.abs(genes[i]))));
+		}
+		return 418982.9101 + somatorio;
 	}
 	
 	public void mutation() {
 		//TODO: implementar mutação
-		cromossomo = ((int)(Math.random()*(top-bottom+1)))+bottom;
+		genes[0] = ((int)(Math.random()*(top-bottom+1)))+bottom;
 	}
 	
 	public Cromossomo crossover(Cromossomo partner) {
@@ -95,7 +98,7 @@ public class Cromossomo {
 		return partner;
 	}
 	
-	private Integer grayToBinary(Integer gray) {
+	public Integer grayToBinary(Integer gray) {
 		int mask = maskOne;
 		String binaryString = "";
 		if ((mask & gray) > 0) {
@@ -104,6 +107,27 @@ public class Cromossomo {
 		for (int i=1;i<31;i++) {
 			int maskA = mask >> i;
 			int maskB = mask >> (i-1);
+			if (((maskA & gray) ^ (maskB & gray))  > 0) 
+				binaryString = binaryString + "1";
+			else 
+				binaryString = binaryString + "0"; 
+		}
+		return Integer.parseInt(binaryString, 2);
+	}
+	
+	public Integer grayToBinary(String grayString) {
+		int mask = maskOne;
+		int maskA,maskB;
+		Integer gray = Integer.parseInt(grayString,2);
+		String binaryString = "";
+		if ((mask & gray) > 0) {
+			binaryString = binaryString + "1";
+		} else {
+			binaryString = binaryString + "0";
+		}
+		for (int i=1;i<32;i++) {
+			maskA = mask >> i;
+			maskB = mask >> (i-1);
 			if (((maskA & gray) ^ (maskB & gray))  > 0) 
 				binaryString = binaryString + "1";
 			else 
@@ -123,38 +147,22 @@ public class Cromossomo {
 	}
 	
 	public String getStringRepresentation() {
-		//32Bits
-		return Integer.toBinaryString(cromossomo);
+		//31Bits
+		return Integer.toBinaryString(genes[0]);
 	}
 	
 	public double getDoubleRepresentation(Integer cromossomo) {
 		return grayToDouble(cromossomo);
 	}
 	
-    // append reverse of order n gray code to prefix string, and print
-    static String yarg(String prefix, int n) {
-        if (n == 0) return prefix;
-        else {
-            prefix = gray(prefix + "1", n - 1) + yarg(prefix + "0", n - 1);
-            return prefix;
-        }
-    }  
-
-    // append order n gray code to end of prefix string, and print
-    static String gray(String prefix, int n) {
-        if (n == 0) return prefix;
-        else {
-            prefix = gray(prefix + "0", n - 1) + yarg(prefix + "1", n - 1);
-            return prefix;
-        }
-    }
-
+    //Getters and Setters
+	
 	public Integer getCromossomo() {
-		return cromossomo;
+		return genes[0];
 	}
 
 	public void setCromossomo(Integer cromossomo) {
-		this.cromossomo = cromossomo;
+		this.genes[0] = cromossomo;
 	}  
 
 }
