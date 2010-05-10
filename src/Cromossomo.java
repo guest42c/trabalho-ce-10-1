@@ -54,15 +54,14 @@ public class Cromossomo {
 	 * @return fitness do cromossomo
 	 */
 	public double evaluation() {
-		//TODO Mudar as variáveis genes[] para pegar o valor double que elas representam. Usar grayToDouble.
 		double somatorio = 0;
 		for (int i=0;i<MAX_GENES;i++) {
-			somatorio =  somatorio + (-genes[i]*Math.sin(Math.sqrt(Math.abs(genes[i]))));
+			somatorio =  somatorio + 
+				(-grayToDouble(genes[i])*Math.sin(Math.sqrt(Math.abs(grayToDouble(genes[i])))));
 		}
 		return 418982.9101 + somatorio;
 	}
-	
-	
+		
 	public void mutation() {
 		//TODO: implementar mutação
 		genes[0] = ((int)(Math.random()*(top-bottom+1)))+bottom;
@@ -111,12 +110,31 @@ public class Cromossomo {
 		return Integer.parseInt(binaryString, 2);
 	}
 	
-	/*
+	
 	public int grayToBinary(String grayString) {
-		//TODO: fazer		
-		return 0;
+		boolean value;
+		int maskA = Integer.parseInt("01000000000000000000000000000000",2);
+		int gray = Integer.parseInt(grayString, 2);
+		String binaryString = "";
+		//TODO: if problematico (mesma solução do binaryToGray)
+		if (true) {
+			binaryString = "0";
+			value = false;
+		}
+		//FIM da parte com problema com problema
+		for (int i=1;i<=31;i++) {
+			if ((maskA & gray) > 0) 
+				value = !value;
+			if (value) {
+				binaryString = binaryString + "1";
+			} else {
+				binaryString = binaryString + "0";
+			}
+			maskA = maskA >> 1;
+		}
+		return Integer.parseInt(binaryString, 2);
 	}
-	*/
+	
 	
 	/**
 	 * Retorna o valor binário do gray coding.
@@ -156,14 +174,11 @@ public class Cromossomo {
 	 * @return
 	 */
 	private double grayToDouble(Integer gray) {
-		//TODO: terminar metodo grayToBinary() e então finalizar esse metodo aqui.
-		Integer binary = grayToBinary(gray);
-		
+		Integer binary = grayToBinary(gray);		
 		return bottom + binary * ((top-bottom)/(Math.pow(2, 32)-1));
 	}
 	
-    //Getters and Setters
-	
+    //Getters and Setters	
 	public int[] getCromossomo() {
 		return genes;
 	}
@@ -173,5 +188,4 @@ public class Cromossomo {
 			this.genes[0] = cromossomo[i];
 		}		
 	}  
-
 }

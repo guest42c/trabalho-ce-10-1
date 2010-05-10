@@ -28,6 +28,18 @@ public class TrabalhoCE {
 			binaryString = "0" + binaryString;
 		}
 		System.out.println("Binary: " + binaryString);
+		
+		System.out.println();
+		
+		String binaryString2 = "00000000000000000000000000000101";
+		int binary2 = Integer.parseInt(binaryString2,2);
+		int gray2 = cromossomo.binaryToGray(binary2);
+		System.out.println("Binary: " + binaryString2);
+		String grayString2 = Integer.toBinaryString(gray2);
+		while (grayString2.length() < 32) {
+			grayString2 = "0" + grayString2;
+		}
+		System.out.println("Gray  : " + grayString2);
 
 	}
 
