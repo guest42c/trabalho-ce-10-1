@@ -7,7 +7,7 @@ public class TrabalhoCE {
 	public static void main(String[] args) {
 
 
-		System.out.println("Construtor com parametro de solução:");
+//		System.out.println("Construtor com parametro de solução:");
 		
 		String[] candidato = new String[10];
 		for (int i=0;i<10;i++) {
@@ -17,7 +17,9 @@ public class TrabalhoCE {
 		System.out.println(cromossomo.evaluation() + "\n");
 		
 		Cromossomo cromossomo2 = new Cromossomo();
-		System.out.println(cromossomo2.evaluation() + "\n");	
+		//System.out.println("Fitness inicial: " + cromossomo2.evaluation() + "\n");
+		cromossomo2.mutation();
+		//System.out.println("Fitness após mutação: " + cromossomo2.evaluation() + "\n");
 		
 		String grayString = "00000000000000000000000000000101";
 		int gray = Integer.parseInt(grayString,2);
@@ -31,7 +33,7 @@ public class TrabalhoCE {
 		
 		System.out.println();
 		
-		String binaryString2 = "00000000000000000000000000000101";
+		String binaryString2 = "01000000000000000000000000000110";
 		int binary2 = Integer.parseInt(binaryString2,2);
 		int gray2 = cromossomo.binaryToGray(binary2);
 		System.out.println("Binary: " + binaryString2);
@@ -40,7 +42,7 @@ public class TrabalhoCE {
 			grayString2 = "0" + grayString2;
 		}
 		System.out.println("Gray  : " + grayString2);
-
+				
 	}
 
 }

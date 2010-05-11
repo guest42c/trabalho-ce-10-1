@@ -54,6 +54,7 @@ public class Cromossomo {
 	 * @return fitness do cromossomo
 	 */
 	public double evaluation() {
+		//TODO: esta apresentando problema na chamada grayToDouble que leva até grayToBinary
 		double somatorio = 0;
 		for (int i=0;i<MAX_GENES;i++) {
 			somatorio =  somatorio + 
@@ -63,8 +64,9 @@ public class Cromossomo {
 	}
 		
 	public void mutation() {
-		//TODO: implementar mutação
-		genes[0] = ((int)(Math.random()*(top-bottom+1)))+bottom;
+		int value = ((int)(Math.random()*(top-bottom+1)))+bottom;
+		int gene = ((int)(Math.random()*(MAX_GENES)));
+		genes[gene] = value;
 	}
 	
 	/**
@@ -147,16 +149,11 @@ public class Cromossomo {
 		int maskA = Integer.parseInt("01000000000000000000000000000000",2);
 		int maskB = Integer.parseInt("00000000000000000000000000000000",2);
 		String grayString = "";
-		//TODO: corrigir esse if
-		//Problema: mascara "10000000000000000000000000000000" não existe pq não é uma representação valida
-		//Ou seja, tem que testar se primeiro bit (mais significativo é 1) 
-		//se for add 1 pra String se não add 0.
-		if ((mask & binary) > 0) {
+		if (((1 << 31) & binary) != 0) {
 			grayString = grayString + "1";
 		} else {
 			grayString = grayString + "0";
 		}
-		//FIM DO IF COM PROBLEMA
 		for (int i=1;i<=31;i++) {
 			if (((maskA & binary) ^ (maskB & binary))  > 0) 
 				grayString = grayString + "1";
