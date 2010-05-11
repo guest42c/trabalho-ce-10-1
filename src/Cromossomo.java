@@ -38,7 +38,11 @@ public class Cromossomo {
 	
 	public Cromossomo(String[] solucao) {
 		for (int i=0;i<MAX_GENES;i++) {
-			genes[i] = Integer.parseInt(solucao[i],2);
+			String bitString = solucao[i];
+			while (bitString.length() < 32) {
+				bitString = "0" + bitString; 
+			}
+			genes[i] = Integer.parseInt(bitString.substring(1,32),2);
 		}
 	}
 	
