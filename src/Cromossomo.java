@@ -65,7 +65,7 @@ public class Cromossomo {
 		
 	public void mutation() {
 		int value = ((int)(Math.random()*(top-bottom+1)))+bottom;
-		int gene = ((int)(Math.random()*(MAX_GENES)));
+		int gene = ((int) (Math.random()*(MAX_GENES)));
 		genes[gene] = value;
 	}
 	
@@ -93,12 +93,8 @@ public class Cromossomo {
 		boolean value;
 		int maskA = Integer.parseInt("01000000000000000000000000000000",2);
 		String binaryString = "";
-		//TODO: if problematico (mesma solução do binaryToGray)
-		if (true) {
-			binaryString = "0";
-			value = false;
-		}
-		//FIM da parte com problema com problema
+		binaryString = "0";
+		value = false;
 		for (int i=1;i<=31;i++) {
 			if ((maskA & gray) > 0) 
 				value = !value;
@@ -109,7 +105,7 @@ public class Cromossomo {
 			}
 			maskA = maskA >> 1;
 		}
-		return Integer.parseInt(binaryString, 2);
+		return Integer.parseInt(binaryString.substring(1,32), 2);
 	}
 	
 	
@@ -118,12 +114,8 @@ public class Cromossomo {
 		int maskA = Integer.parseInt("01000000000000000000000000000000",2);
 		int gray = Integer.parseInt(grayString, 2);
 		String binaryString = "";
-		//TODO: if problematico (mesma solução do binaryToGray)
-		if (true) {
-			binaryString = "0";
-			value = false;
-		}
-		//FIM da parte com problema com problema
+		binaryString = "0";
+		value = false;
 		for (int i=1;i<=31;i++) {
 			if ((maskA & gray) > 0) 
 				value = !value;
@@ -134,7 +126,7 @@ public class Cromossomo {
 			}
 			maskA = maskA >> 1;
 		}
-		return Integer.parseInt(binaryString, 2);
+		return Integer.parseInt(binaryString.substring(1,32), 2);
 	}
 	
 	
@@ -149,11 +141,7 @@ public class Cromossomo {
 		int maskA = Integer.parseInt("01000000000000000000000000000000",2);
 		int maskB = Integer.parseInt("00000000000000000000000000000000",2);
 		String grayString = "";
-		if (((1 << 31) & binary) != 0) {
-			grayString = grayString + "1";
-		} else {
-			grayString = grayString + "0";
-		}
+		grayString = grayString + "0";
 		for (int i=1;i<=31;i++) {
 			if (((maskA & binary) ^ (maskB & binary))  > 0) 
 				grayString = grayString + "1";
@@ -162,7 +150,7 @@ public class Cromossomo {
 			maskB = maskA;
 			maskA = mask >> i;
 		}
-		return Integer.parseInt(grayString, 2);
+		return Integer.parseInt(grayString.substring(1,32), 2);
 	}
 	
 	/**
