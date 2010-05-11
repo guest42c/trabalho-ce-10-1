@@ -58,7 +58,6 @@ public class Cromossomo {
 	 * @return fitness do cromossomo
 	 */
 	public double evaluation() {
-		//TODO: esta apresentando problema na chamada grayToDouble que leva até grayToBinary
 		double somatorio = 0;
 		for (int i=0;i<MAX_GENES;i++) {
 			somatorio =  somatorio + 
@@ -81,8 +80,22 @@ public class Cromossomo {
 	 * @return
 	 */
 	public Cromossomo crossover(Cromossomo partner) {
-		//TODO: Implementar crossover
-		return partner;
+		//TODO: Implementar crossover com mascara aleatoria
+		int mascara	= rand.nextInt();
+		int [] heranca1 = new int[MAX_GENES];
+		int [] heranca2 = new int[MAX_GENES];
+		for (int i=0;i<MAX_GENES;i++) {
+			heranca1[i] = genes[i] & mascara;
+			heranca2[i] = genes[i] & ~mascara;
+		}
+		int combinacao;
+		String [] genesFilho = new String[MAX_GENES];
+		for (int i=0;i<MAX_GENES;i++) {
+			combinacao = heranca1[i] | heranca2[i];
+			genesFilho[i] = Integer.toBinaryString(combinacao);
+		}
+		Cromossomo filho = new Cromossomo(genesFilho);		
+		return filho;
 	}
 	
 	/**
