@@ -102,6 +102,8 @@ public class Cromossomo {
 		int [] heranca1 = new int[MAX_GENES];
 		int [] heranca2 = new int[MAX_GENES];
 		for (int i=0;i<MAX_GENES;i++) {
+			heranca1[i] = genes[i] & mascara;
+			heranca2[i] = partner.genes[i] & ~mascara;
 			heranca1[i] = genes[i] & ~mascara;
 			heranca2[i] = partner.genes[i] & mascara;
 		}
@@ -195,6 +197,15 @@ public class Cromossomo {
 	private double grayToDouble(Integer gray) {
 		Integer binary = grayToBinary(gray);		
 		return bottom + binary * ((top-bottom)/(Math.pow(2, 32)-1));
+	}
+	
+	public String toString() {
+		String retorno = "x";
+		for (int i=0;i<MAX_GENES;i++) {
+			retorno = retorno + i + " = " + grayToDouble(genes[i]) + "\n";
+		}
+		return retorno;
+		
 	}
 	
     //Getters and Setters	
