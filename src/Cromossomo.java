@@ -72,6 +72,21 @@ public class Cromossomo {
 		genes[gene] = value;
 	}
 	
+	public int mascaraCrossover(){
+		
+		int corte = Math.abs((rand.nextInt()%29)+1);
+		String mascaraTemp = new String();
+		for (int i = 31; i >= 0; i--){
+			if (i <= corte){
+				mascaraTemp += "1";
+			}
+			else
+				mascaraTemp += "0";
+		}
+		return Integer.parseInt(mascaraTemp,2);
+		
+	}
+	
 	/**
 	 * Operação de crossover.
 	 * Funcionamento: em discussão.
@@ -81,12 +96,14 @@ public class Cromossomo {
 	 */
 	public Cromossomo crossover(Cromossomo partner) {
 		//TODO: Implementar crossover com mascara aleatoria
-		int mascara	= rand.nextInt();
+		
+		int mascara	= mascaraCrossover();
+		
 		int [] heranca1 = new int[MAX_GENES];
 		int [] heranca2 = new int[MAX_GENES];
 		for (int i=0;i<MAX_GENES;i++) {
-			heranca1[i] = genes[i] & mascara;
-			heranca2[i] = genes[i] & ~mascara;
+			heranca1[i] = genes[i] & ~mascara;
+			heranca2[i] = partner.genes[i] & mascara;
 		}
 		int combinacao;
 		String [] genesFilho = new String[MAX_GENES];
