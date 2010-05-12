@@ -12,18 +12,18 @@ public class TrabalhoCE {
 		
 		int populacao;
 		double probMutacao;
-		double porcentSobrevGerAnterior;	//Porcentagem de individuos da geração atual que passam para a proxima geração
-		double deltaMelhoraSolucaoParametro;			//Variação de melhora na solução atual para a anterior (usada como condição de parada)
-		int numMaxIteracoes; 				//Numero maximo de iterações (gerações), usado como condição de parada
+		double porcentSobrevGerAnterior;		//Porcentagem de individuos da geração atual que passam para a proxima geração
+		double deltaMelhoraSolucaoParametro;	//Variação de melhora na solução atual para a anterior (usada como condição de parada)
+		int numMaxIteracoes; 					//Numero maximo de iterações (gerações), usado como condição de parada
 		int contadorIteracoes = 0;
 		double deltaAtual = 1;
 		
 		//Definir variaveis
-		populacao = 10;
-		probMutacao = 0.01;
-		porcentSobrevGerAnterior = 0.3;
+		populacao = Integer.parseInt(args[0]);//100;
+		probMutacao = Double.parseDouble(args[1]);//0.01;
+		porcentSobrevGerAnterior = Double.parseDouble(args[2]); //0.1;
 		deltaMelhoraSolucaoParametro = 0.0000001;
-		numMaxIteracoes = 100;
+		numMaxIteracoes = Integer.parseInt(args[3]); //100;
 		
 		double numeroSobreviventesGerAnt =  Math.floor(porcentSobrevGerAnterior * populacao);
 		
