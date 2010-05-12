@@ -66,10 +66,19 @@ public class Cromossomo {
 		return 418982.9101 + somatorio;
 	}
 		
-	public void mutation() {
-		int value = ((int)(Math.random()*(top-bottom+1)))+bottom;
-		int gene = ((int) (Math.random()*(MAX_GENES)));
-		genes[gene] = value;
+	public void mutation(double probabilidade) {
+		for (int gene=0;gene<MAX_GENES;gene++) {
+			int value;
+			if (Math.random() > probabilidade) {
+				//((int)(Math.random()*(top-bottom+1)))+bottom;
+				int shift = (int) Math.floor(Math.random()*32);
+				int mascaraMutacao = 1;
+				mascaraMutacao = mascaraMutacao << shift;
+				value = genes[gene] ^ mascaraMutacao; 
+				genes[gene] = value;
+			}			
+		}
+		
 	}
 	
 	public int mascaraCrossover(){

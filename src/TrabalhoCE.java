@@ -1,7 +1,11 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import  java.util.Collections;  
 import  java.util.Comparator;  
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class TrabalhoCE {
 
@@ -17,13 +21,14 @@ public class TrabalhoCE {
 		int numMaxIteracoes; 					//Numero maximo de iterações (gerações), usado como condição de parada
 		int contadorIteracoes = 0;
 		double deltaAtual = 1;
+		String log = "";
 		
 		//Definir variaveis
-		populacao = Integer.parseInt(args[0]);//100;
-		probMutacao = Double.parseDouble(args[1]);//0.01;
-		porcentSobrevGerAnterior = Double.parseDouble(args[2]); //0.1;
-		deltaMelhoraSolucaoParametro = 0.0000001;
-		numMaxIteracoes = Integer.parseInt(args[3]); //100;
+		populacao = 100; //Integer.parseInt(args[0]);
+		probMutacao = 0.01; //Double.parseDouble(args[1]);
+		porcentSobrevGerAnterior = 0.1; //Double.parseDouble(args[2]); 
+		deltaMelhoraSolucaoParametro = 0.0001;
+		numMaxIteracoes = 2000; //Integer.parseInt(args[3]);
 		
 		double numeroSobreviventesGerAnt =  Math.floor(porcentSobrevGerAnterior * populacao);
 		
@@ -32,14 +37,34 @@ public class TrabalhoCE {
 		
 		ArrayList<Cromossomo> geracaoAtual = new ArrayList<Cromossomo>();
 		
+		//Apaga log se ele ja existe
+		try { 
+			File file = new File("logAG.rtf");
+			//Apaga o arquivo se ele ja existir
+			file.delete();							
+		} catch (Exception e) { }
+		
 		//Gerando população inicial
 		for (int i=0;i<populacao;i++) {
 			geracaoAtual.add(new Cromossomo());
 		}
-		
+				
 		while ( (contadorIteracoes < numMaxIteracoes) ) { 
 			
-			contadorIteracoes++;
+			log = "[" + contadorIteracoes + "] \n";
+						
+			//Armazenando fitness das soluções da população no log
+			for (Cromossomo solucaoi : geracaoAtual) {
+				log = log + solucaoi.evaluation() + " \n";
+			}
+						
+			try {
+				FileWriter logWriter = new FileWriter("logAG.rtf",true);
+				logWriter.append(log);
+				logWriter.close();
+			} catch (Exception e) {
+				System.out.println(e.toString());
+			}
 			
 			Collections.sort(geracaoAtual, new Comparator() {  
 				public int compare(Object o1, Object o2) {  
@@ -98,12 +123,17 @@ public class TrabalhoCE {
 				}
 				partner = geracaoAtual.get(index-1); //Nao entedi pq da erro se nao colocar -1 *VERIFICAR*
 				
-				novaGeracao.add(geracaoAtual.get(i).crossover(partner));
+				//Gera filho com crossover
+				Cromossomo filho = geracaoAtual.get(i).crossover(partner);
+				
+				//Aplica mutação
+				filho.mutation(probMutacao);
+				novaGeracao.add(filho);
 				
 			}
 			
 			geracaoAtual = novaGeracao;			
-			
+			contadorIteracoes++;
 		}
 				
 		System.out.println("Melhor solução: \n" + melhorSolucaoAtual.toString());
@@ -123,7 +153,7 @@ public class TrabalhoCE {
 		
 		Cromossomo cromossomo2 = new Cromossomo();
 		System.out.println("Fitness inicial do cromossomo aleatório: " + cromossomo2.evaluation() + "\n");
-		cromossomo2.mutation();
+		//cromossomo2.mutation();
 		System.out.println("Fitness após mutação: " + cromossomo2.evaluation() + "\n");		
 
 		String grayString = "00000000000000000000000000000101";
