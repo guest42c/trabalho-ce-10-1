@@ -200,9 +200,9 @@ public class Cromossomo {
 	}
 	
 	public String toString() {
-		String retorno = "x";
+		String retorno = "Fitness: " + evaluation() + "\n";
 		for (int i=0;i<MAX_GENES;i++) {
-			retorno = retorno + i + " = " + grayToDouble(genes[i]) + "\n";
+			retorno =  retorno + "x" + i + " = " + grayToDouble(genes[i]) + "\n";
 		}
 		return retorno;
 		

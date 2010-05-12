@@ -1,5 +1,7 @@
 import java.util.ArrayList;
-
+import  java.util.Collections;  
+import  java.util.Comparator;  
+import java.util.Random;
 
 public class TrabalhoCE {
 
@@ -17,11 +19,13 @@ public class TrabalhoCE {
 		double deltaAtual = 1;
 		
 		//Definir variaveis
-		populacao = 100;
+		populacao = 10;
 		probMutacao = 0.01;
 		porcentSobrevGerAnterior = 0.3;
 		deltaMelhoraSolucaoParametro = 0.0000001;
-		numMaxIteracoes = 500;
+		numMaxIteracoes = 100;
+		
+		double numeroSobreviventesGerAnt =  Math.floor(porcentSobrevGerAnterior * populacao);
 		
 		double fitnessMelhorSolucaoAtual = 0;
 		Cromossomo melhorSolucaoAtual = null;
@@ -33,24 +37,76 @@ public class TrabalhoCE {
 			geracaoAtual.add(new Cromossomo());
 		}
 		
-		while ((deltaMelhoraSolucaoParametro < deltaAtual) && (contadorIteracoes < numMaxIteracoes) ) {
+		while ( (contadorIteracoes < numMaxIteracoes) ) { 
 			
 			contadorIteracoes++;
-										
-			//Calculando melhor solucao atual
-			for (Cromossomo solucaoi : geracaoAtual) {
-				double fitness = solucaoi.evaluation();
-				if (fitnessMelhorSolucaoAtual < fitness) {
-					melhorSolucaoAtual = solucaoi;
-					fitnessMelhorSolucaoAtual = fitness;
-					System.out.println("Nova melhor solução: " + fitness);
-				}
+			
+			Collections.sort(geracaoAtual, new Comparator() {  
+				public int compare(Object o1, Object o2) {  
+					Cromossomo c1 = (Cromossomo) o1;  
+					Cromossomo c2 = (Cromossomo) o2;  
+					int retorno;
+					double eval1 = c1.evaluation();
+					double eval2 = c2.evaluation();
+					if (eval1 > eval2) {
+						retorno = -1;
+					} else {
+						if (eval1 == eval2) 
+						retorno = 0;
+						else retorno = 1;
+					}
+					return retorno;  
+				}  
+			});
+			
+			Cromossomo melhor = geracaoAtual.get(0);
+			double melhorFitness = melhor.evaluation();
+			deltaAtual = (melhorFitness/fitnessMelhorSolucaoAtual)-1;
+			
+			if (melhorFitness > fitnessMelhorSolucaoAtual) {
+				melhorSolucaoAtual = melhor;
+				fitnessMelhorSolucaoAtual = melhorFitness;
+			}			
+			
+//			Começa a construir a nova geração
+			ArrayList<Cromossomo> novaGeracao = new ArrayList<Cromossomo>();
+			
+						
+			//Pega a porcentagem dos cromossomos que irão passar de uma geração a outra
+			for (int i=0;i<numeroSobreviventesGerAnt;i++) {
+				novaGeracao.add(geracaoAtual.get(i));
 			}
 			
+			//Variaveis necessarias para gerar filhos por crossover
+			double numeroFilhos = populacao - numeroSobreviventesGerAnt; //Quantos filhos temos que gerar
+			double totalFitness = 0;
+			for (Cromossomo solucaoi : geracaoAtual) {
+				totalFitness = totalFitness + solucaoi.evaluation();
+			}
+			Random generator = new Random();
+			
+			//Faz os crossover dos melhores pais com os candidatos a parceiros
+			for (int i=0;i<numeroFilhos;i++) {
+				Cromossomo partner = null;
+				double roleta = generator.nextDouble();
+				
+				double acumulado = 0;
+				int index = 0;
+				while (acumulado <= roleta) {
+					acumulado = acumulado + (geracaoAtual.get(index).evaluation()/totalFitness);
+					index++;
+				}
+				partner = geracaoAtual.get(index-1); //Nao entedi pq da erro se nao colocar -1 *VERIFICAR*
+				
+				novaGeracao.add(geracaoAtual.get(i).crossover(partner));
+				
+			}
+			
+			geracaoAtual = novaGeracao;			
 			
 		}
-		
-		System.out.println("Melhor solução: " + melhorSolucaoAtual.toString());
+				
+		System.out.println("Melhor solução: \n" + melhorSolucaoAtual.toString());
 
 	}
 	
