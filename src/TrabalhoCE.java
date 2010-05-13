@@ -1,11 +1,19 @@
+import java.awt.Color;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import  java.util.Collections;  
 import  java.util.Comparator;  
 import java.util.Random;
-import java.util.logging.Logger;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.data.category.DefaultCategoryDataset;
 
 public class TrabalhoCE {
 
@@ -22,13 +30,16 @@ public class TrabalhoCE {
 		int contadorIteracoes = 0;
 		double deltaAtual = 1;
 		String log = "";
+		ArrayList<EstatisticasGeracao> evolucaoGeracoes = new ArrayList<EstatisticasGeracao>();
 		
 		//Definir variaveis
-		populacao = 100; //Integer.parseInt(args[0]);
+		populacao = 10; //Integer.parseInt(args[0]);
 		probMutacao = 0.01; //Double.parseDouble(args[1]);
 		porcentSobrevGerAnterior = 0.1; //Double.parseDouble(args[2]); 
 		deltaMelhoraSolucaoParametro = 0.0001;
-		numMaxIteracoes = 2000; //Integer.parseInt(args[3]);
+		numMaxIteracoes = 10; //Integer.parseInt(args[3]);
+		
+		double[] fitnessGeracao = new double[numMaxIteracoes];
 		
 		double numeroSobreviventesGerAnt =  Math.floor(porcentSobrevGerAnterior * populacao);
 		
@@ -51,21 +62,7 @@ public class TrabalhoCE {
 				
 		while ( (contadorIteracoes < numMaxIteracoes) ) { 
 			
-			log = "[" + contadorIteracoes + "] \n";
 						
-			//Armazenando fitness das soluções da população no log
-			for (Cromossomo solucaoi : geracaoAtual) {
-				log = log + solucaoi.evaluation() + " \n";
-			}
-						
-			try {
-				FileWriter logWriter = new FileWriter("logAG.rtf",true);
-				logWriter.append(log);
-				logWriter.close();
-			} catch (Exception e) {
-				System.out.println(e.toString());
-			}
-			
 			Collections.sort(geracaoAtual, new Comparator() {  
 				public int compare(Object o1, Object o2) {  
 					Cromossomo c1 = (Cromossomo) o1;  
@@ -83,6 +80,31 @@ public class TrabalhoCE {
 					return retorno;  
 				}  
 			});
+			
+			log = "[" + contadorIteracoes + "] \n";
+			
+			int candidatoIndex = 0;
+			
+			double fitness;
+			//Armazenando fitness das soluções da população no log
+			for (Cromossomo solucaoi : geracaoAtual) {
+				fitness = solucaoi.evaluation();
+				fitnessGeracao[candidatoIndex] = fitness;
+				candidatoIndex++;
+				log = log + fitness + " \n";
+								
+			}
+			
+			EstatisticasGeracao umaGeracao = new EstatisticasGeracao(fitnessGeracao);
+			evolucaoGeracoes.add(umaGeracao);
+						
+			try {
+				FileWriter logWriter = new FileWriter("logAG.rtf",true);
+				logWriter.append(log);
+				logWriter.close();
+			} catch (Exception e) {
+				System.out.println(e.toString());
+			}
 			
 			Cromossomo melhor = geracaoAtual.get(0);
 			double melhorFitness = melhor.evaluation();
@@ -137,8 +159,49 @@ public class TrabalhoCE {
 		}
 				
 		System.out.println("Melhor solução: \n" + melhorSolucaoAtual.toString());
-
+		
+		//Graficos
+		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+		
+		fitnessGeracao = evolucaoGeracoes.get(0).getFitness();
+		for(int i=0;i<populacao;i++) {
+			dataset.addValue(fitnessGeracao[i], "Candidatos", Integer.toString(i));
+		}
+		
+		JFreeChart chart = ChartFactory.createBarChart3D("Adaptabilidade da Geração",
+		        null, "Candidatos", dataset, PlotOrientation.HORIZONTAL,
+		        true, false, false);
+		
+		CategoryPlot plot = chart.getCategoryPlot();
+	    plot.getRangeAxis().setRange(0, 100);
+	    BarRenderer renderer = (BarRenderer)plot.getRenderer();
+	    renderer.setSeriesPaint(0, Color.BLUE);
+	    
+	    try {
+	        //response.setContentType("image/png");
+	        //OutputStream os = response.getOutputStream();
+	    	int height = dataset.getColumnCount()*45 + 65;
+	        //ChartUtilities.writeChartAsPNG(os, chart, 500, height);
+	        //os.close();
+	      } catch (Exception e) {
+	        System.err.println("Problem occurred creating chart.");
+	      }
+	
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public void bateriaTestesCromossomo() {
 		
