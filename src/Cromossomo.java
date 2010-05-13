@@ -181,7 +181,7 @@ public class Cromossomo {
 	 * @param binary
 	 * @return gray coding
 	 */
-	public int binaryToGray(Integer binary) {
+	/*public int binaryToGray(Integer binary) {
 		int mask = maskOne;
 		int maskA = Integer.parseInt("01000000000000000000000000000000",2);
 		int maskB = Integer.parseInt("00000000000000000000000000000000",2);
@@ -196,6 +196,18 @@ public class Cromossomo {
 			maskA = mask >> i;
 		}
 		return Integer.parseInt(grayString.substring(1,32), 2);
+	}*/
+	
+	public int binaryToGray(Integer binary) {
+		String binaryString = Integer.toBinaryString(binary);
+		System.out.println(binaryString.length());
+		String grayString = new String();
+		grayString = grayString.concat(String.valueOf(binaryString.charAt(0)));
+		for (int i=1;i<=30;i++) {
+			grayString = grayString.concat(String.valueOf(Integer.parseInt(String.valueOf(binaryString.charAt(i-1)))^ Integer.parseInt(String.valueOf(binaryString.charAt(i)))));
+			
+		}
+		return Integer.parseInt(grayString.substring(0,31), 2);
 	}
 	
 	/**
