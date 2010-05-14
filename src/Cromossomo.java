@@ -17,8 +17,8 @@ public class Cromossomo {
 	
 	private static int MAX_GENES = 10;
 	int [] genes = new int[MAX_GENES];	
-	private static int bottom = -500; //limite inferior da solução
-	private static int top = 500; //limite superior da solução
+	private static int bottom = -600; //limite inferior da solução
+	private static int top = 600; //limite superior da solução
 	private static int maskOne = Integer.parseInt("01000000000000000000000000000000",2);
 	
 	Random rand = new Random();
@@ -64,6 +64,16 @@ public class Cromossomo {
 				(-grayToDouble(genes[i])*Math.sin(Math.sqrt(Math.abs(grayToDouble(genes[i])))));
 		}
 		return 418982.9101 + somatorio;
+	}
+	
+	public double evaluation2() {
+		double produtorio = 1;
+		double somatorio = 0;
+		for (int i=0;i<MAX_GENES;i++) {
+			somatorio = somatorio + (Math.pow(grayToDouble(genes[i]),2)/4000);
+			produtorio = produtorio * Math.cos(grayToDouble(genes[i])/Math.sqrt(i));
+		}
+		return (1+somatorio-produtorio);
 	}
 		
 	public void mutation(double probabilidade) {
@@ -220,8 +230,13 @@ public class Cromossomo {
 		return bottom + binary * ((top-bottom)/(Math.pow(2, 32)-1));
 	}
 	
-	public String toString() {
-		String retorno = "Fitness: " + evaluation() + "\n";
+	public String toString(int opcao) {
+		String retorno;
+		if (opcao == 0) {
+			retorno = "Fitness: " + evaluation() + "\n";
+		} else {
+			retorno = "Fitness: " + evaluation2() + "\n";
+		}
 		for (int i=0;i<MAX_GENES;i++) {
 			retorno =  retorno + "x" + i + " = " + grayToDouble(genes[i]) + "\n";
 		}
