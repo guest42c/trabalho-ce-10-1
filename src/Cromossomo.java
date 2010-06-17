@@ -17,10 +17,10 @@ public class Cromossomo {
 	
 	private static int MAX_GENES = 10;
 	int [] genes = new int[MAX_GENES];	
-	private static int bottom = -600; //limite inferior da solução
-	private static int top = 600; //limite superior da solução
-	private static int maskOne = Integer.parseInt("01000000000000000000000000000000",2);
-	
+	private static int bottom = -500; //limite inferior da solução
+	private static int top = 500; //limite superior da solução
+	private static int bottom2 = -600; //limite inferior da solução
+	private static int top2 = 600; //limite superior da solução
 	Random rand = new Random();
 	
 	/**
@@ -61,7 +61,7 @@ public class Cromossomo {
 		double somatorio = 0;
 		for (int i=0;i<MAX_GENES;i++) {
 			somatorio =  somatorio + 
-				(-grayToDouble(genes[i])*Math.sin(Math.sqrt(Math.abs(grayToDouble(genes[i])))));
+				(-grayToDouble(genes[i],0)*Math.sin(Math.sqrt(Math.abs(grayToDouble(genes[i],0)))));
 		}
 		return 418982.9101 + somatorio;
 	}
@@ -70,8 +70,10 @@ public class Cromossomo {
 		double produtorio = 1;
 		double somatorio = 0;
 		for (int i=0;i<MAX_GENES;i++) {
-			somatorio = somatorio + (Math.pow(grayToDouble(genes[i]),2)/4000);
-			produtorio = produtorio * Math.cos(grayToDouble(genes[i])/Math.sqrt(i));
+			somatorio = somatorio + (Math.pow(grayToDouble(genes[i],1),2)/4000);
+			double cos = Math.cos(grayToDouble(genes[i],1)/Math.sqrt(i));
+			if (Double.compare(cos,Double.NaN) == 0) cos = 0;
+			produtorio = produtorio * cos;
 		}
 		return (1+somatorio-produtorio);
 	}
@@ -114,8 +116,6 @@ public class Cromossomo {
 	 * @return
 	 */
 	public Cromossomo crossover(Cromossomo partner) {
-		//TODO: Implementar crossover com mascara aleatoria
-		
 		int mascara	= mascaraCrossover();
 		
 		int [] heranca1 = new int[MAX_GENES];
@@ -191,23 +191,6 @@ public class Cromossomo {
 	 * @param binary
 	 * @return gray coding
 	 */
-	/*public int binaryToGray(Integer binary) {
-		int mask = maskOne;
-		int maskA = Integer.parseInt("01000000000000000000000000000000",2);
-		int maskB = Integer.parseInt("00000000000000000000000000000000",2);
-		String grayString = "";
-		grayString = grayString + "0";
-		for (int i=1;i<=31;i++) {
-			if (((maskA & binary) ^ (maskB & binary))  > 0) 
-				grayString = grayString + "1";
-			else 
-				grayString = grayString + "0";
-			maskB = maskA;
-			maskA = mask >> i;
-		}
-		return Integer.parseInt(grayString.substring(1,32), 2);
-	}*/
-	
 	public int binaryToGray(Integer binary) {
 		String binaryString = Integer.toBinaryString(binary);
 		System.out.println(binaryString.length());
@@ -225,21 +208,27 @@ public class Cromossomo {
 	 * @param gray
 	 * @return
 	 */
-	private double grayToDouble(Integer gray) {
-		Integer binary = grayToBinary(gray);		
+	private double grayToDouble(Integer gray, int funcao) {
+		Integer binary = grayToBinary(gray);
+		if (funcao == 0) 
 		return bottom + binary * ((top-bottom)/(Math.pow(2, 32)-1));
+		else return bottom2 + binary * ((top2-bottom2)/(Math.pow(2, 32)-1));
 	}
 	
 	public String toString(int opcao) {
 		String retorno;
 		if (opcao == 0) {
 			retorno = "Fitness: " + evaluation() + "\n";
+			for (int i=0;i<MAX_GENES;i++) {
+				retorno =  retorno + "x" + i + " = " + grayToDouble(genes[i],0) + "\n";
+			}
 		} else {
 			retorno = "Fitness: " + evaluation2() + "\n";
+			for (int i=0;i<MAX_GENES;i++) {
+				retorno =  retorno + "x" + i + " = " + grayToDouble(genes[i],1) + "\n";
+			}
 		}
-		for (int i=0;i<MAX_GENES;i++) {
-			retorno =  retorno + "x" + i + " = " + grayToDouble(genes[i]) + "\n";
-		}
+		
 		return retorno;
 		
 	}
